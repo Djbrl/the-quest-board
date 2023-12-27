@@ -9,3 +9,15 @@ async function bootstrap() {
   await app.listen(3001);
 }
 bootstrap();
+
+//TODO :
+
+//DONE basic rate limiter done
+//V1 DONE, fix doubel texting and add cooldown sysstem hot gig alerts
+//V1 DONE, ifx doubel texting and add cooldown systemniche alert
+
+//user accounts
+//priority api requests (no cache)
+
+//do middleware rate limiter next
+//do redis caching

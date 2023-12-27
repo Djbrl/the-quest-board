@@ -1,105 +1,72 @@
 <template>
 <div class="min-h-screen min-w-[500px] bg-red-400">
-    <header class="w-full bg-blue-500 py-4">
-        <div class="flex bg-pink-600">
-            <!-- <div class="mr-auto"></div> -->
-            <div class="inline-block bg-yellow-500 mx-auto sm:mx-20">
-                <!-- Centering on small screens -->
-                <span class="text-3xl font-bold">artquestboard</span>
+    <HeaderBox />
+    <div class="min-h-[80vh] flex flex-col justify-center items-center">
+        <div class="sm:w-1/12"></div>
+        <!-- main landing container -->
+        <div class="w-full sm:w-10/12 bg-white">
+            <!-- hero -->
+            <div class="bg-yellow-500 h-2/3">
+                <HeroBlock class="flex justify-center lg:ml-20"/>
             </div>
-            <!-- <div class="w-5/12 flex"></div> -->
-            <div class="bg-yellow-500 my-auto inline-block hidden sm:ml-auto sm:flex">
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
+            <!-- results -->
+            <div class="h-1/3">
+                <div class="inline-block mt-4 w-full">
+                    <p class="text-xl bg-white text-center font-bold">Recent Quests</p>
                 </div>
-                <div class="mx-2">
-                    <span class="font-lg bg-white font-bold">newsletter</span>
+                <div class="bg-white m-4">
+                    <ResultLoader v-if="showLoader"/>
+                    <ResultBox v-if="results.length" :keywords="props.keywords" :results="sortedResults" :fetchQuests="fetchQuests"/>
                 </div>
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mr-10"></div>
             </div>
-            <!-- <div class="w-1/12"></div> -->
         </div>
-    </header>
-    <div class="min-h-[80vh]">
-        
+        <div class="sm:w-1/12"></div>
     </div>
-    <div class="relative">
-      <div class="sm:absolute sm:bottom-[-30px] flex sm:left-1/2 sm:transform sm:-translate-x-1/2 bg-black p-4 rounded-md">
-        <span class="text-5xl text-white mx-auto font-bold">Overlapping Div</span>
-      </div>
-    </div>
-    <footer class="w-full bg-blue-500 py-4">
-        <div class="sm:min-h-[50px]"></div>
-        <div class="flex bg-pink-600">
-            <!-- <div class="mr-auto"></div> -->
-            <div class="inline-block bg-yellow-500 mx-auto sm:mx-20">
-                <!-- Centering on small screens -->
-                <span class="text-3xl font-bold">artquestboard</span>
-            </div>
-            <!-- <div class="w-5/12 flex"></div> -->
-            <div class="bg-yellow-500 my-auto inline-block hidden sm:ml-auto sm:flex">
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mx-2">
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mr-10"></div>
-            </div>
-            <!-- <div class="w-1/12"></div> -->
-        </div>
-        <div class="flex bg-pink-600">
-            <!-- <div class="mr-auto"></div> -->
-            <div class="inline-block bg-yellow-500 mx-auto sm:mx-20">
-                <!-- Centering on small screens -->
-                <span class="text-3xl font-bold">artquestboard</span>
-            </div>
-            <!-- <div class="w-5/12 flex"></div> -->
-            <div class="bg-yellow-500 my-auto inline-block hidden sm:ml-auto sm:flex">
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mx-2">
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mr-10"></div>
-            </div>
-            <!-- <div class="w-1/12"></div> -->
-        </div>
-        <div class="flex bg-pink-600">
-            <!-- <div class="mr-auto"></div> -->
-            <div class="inline-block bg-yellow-500 mx-auto sm:mx-20 md:mx-20 lg:mx-20">
-                <!-- Centering on small screens -->
-                <span class="text-3xl font-bold">artquestboard</span>
-            </div>
-            <!-- <div class="w-5/12 flex"></div> -->
-            <div class="bg-yellow-500 my-auto inline-block hidden sm:ml-auto sm:flex">
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mx-2">
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mr-10"></div>
-            </div>
-            <!-- <div class="w-1/12"></div> -->
-        </div>
-
-    </footer>
+    <MailBox class="sm:p-10 sm:mt-10" />
+    <FooterBox />
 </div>
 </template>
 
 <script setup lang="ts">
+
+const props = defineProps<{
+keywords: string [];
+}>()
+
+const showLoader = ref(false)
+const results = ref([])
+const sortedResults = ref([])
+
+const fetchQuests = async () => {
+    showLoader.value = true;
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+        const res:any = await fetch("http://localhost:3001/getQuests")
+        showLoader.value = false;
+        const data = await res.json()
+        if (data.length > 0){
+            sortedResults.value = data;
+            results.value = data;
+        }
+    } catch (error) {
+        console.log("fetch failed")
+        showLoader.value = false
+    }
+}
+
+onMounted(async () => {
+    console.log("fetching results...")
+    await fetchQuests()
+    console.log("jobs done")
+})
+
 </script>
+
+<style>
+/* YourComponent.vue or global stylesheet */
+.animate-gradientShift {
+  animation: gradientShift 1s infinite;
+  background-size: 200% 200%;
+}
+
+</style>
