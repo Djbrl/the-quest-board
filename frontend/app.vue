@@ -2,8 +2,6 @@
 <template>
   <div>
     <LandingPage :keywords="artFreelancerKeywords" />
-    <!-- <QuestsFetcher /> -->
-    <!-- <NuxtWelcome /> -->
   </div>
 </template>
 

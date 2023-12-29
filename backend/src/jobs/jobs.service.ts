@@ -75,6 +75,9 @@ export class JobsService implements OnModuleInit {
     }
 
     private async processPost(post: string): Promise<any> {
+        if (post === '') {
+            return null
+        }
         const fields = post.split("&quot;");
         const forhireRegex = /\[for hire\]|for_hire|_open|for_work|looking_for_[a-zA-Z0-9_]+_projects|hire_me_/i;
         const hiringRegex= /hiring_|request_|looking_for_an_|looking_to_commission|looking_to_hire|seeking_artist|seeking_an_|/i;
@@ -117,10 +120,21 @@ export class JobsService implements OnModuleInit {
     //-----------------------------//
 
     async fetchPageContent(url: string): Promise<string> {
-        const page = await this.browser.newPage();
+        let page:puppeteer.Page;
+        try {
+            page = await this.browser.newPage();
+        } catch (error) {
+            console.log("Puppeteer Error :", error)
+            return ''
+        }
     
         console.log("going to page...")
-        await page.goto(url, { waitUntil: 'domcontentloaded' });
+        try {
+            await page.goto(url, { waitUntil: 'domcontentloaded' });
+        } catch (error) {
+            console.log('Puppeteer Error :', error)
+            return ''
+        }
         
         console.log("scrolling...")
         for (let i = 0; i < 1; i++) {
@@ -130,18 +144,27 @@ export class JobsService implements OnModuleInit {
         }
     
         console.log("fetching the content...")
-        const htmlContent = await page.content();
-        console.log("content fetched")
-        return htmlContent;
+        try {
+            const htmlContent = await page.content();
+            console.log("content fetched")
+            return htmlContent;
+        } catch (error) {
+            console.log("failed to fetch content")
+            return ''
+        }
     }
     
     async getJobsFromPages() {
         let allJobsArray: any[] = [];
         
         console.log("fetching your quests")
-        const fetchPromises = this.pageUrls.map(url => this.fetchPageContent(url));
+        const fetchPromises = this.pageUrls.map(async (url) => await this.fetchPageContent(url));
         const pages = await Promise.all(fetchPromises);
         for (const page of pages) {
+          if (page === ''){
+            console.log("Couldn't fetch, skipping...")
+            continue ;
+          }
           const pageData = page.split('</head>')[1].split('\n');
           const hiringPosts = pageData.filter(line => line.includes('<faceplate-tracker source="search" action="view" noun="post"'));
           const jobPromises = hiringPosts.map(post => this.processPost(post));

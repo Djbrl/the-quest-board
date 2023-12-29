@@ -66,6 +66,8 @@ export class AppController {
       banTimer: 0,
     });
 
+    console.log("job done!")
+
     return response;
   }
 }
