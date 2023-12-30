@@ -1,16 +1,16 @@
 <template>
-<div class="min-h-screen min-w-[500px] bg-red-400">
+<div class="min-h-screen min-w-[550px] bg-red-400">
     <LandingHeaderBox/>
-    <div class="min-h-[120vh] bg-pink-500 flex flex-col justify-center items-center">
-        <div class="sm:w-1/12"></div>
+    <div class="min-h-[120vh] bg-pink-500 justify-center items-center">
+        <!-- <div class="w-1/12 sm:hidden"></div> -->
         <!-- main landing container -->
-        <div class="w-full sm:w-10/12 bg-white">
+        <div class="w-[90vw] mx-auto bg-red-400 p-4 rounded-lg border-4 border-yellow-500">
             <!-- hero -->
-            <div class="bg-yellow-500 h-2/3">
-                <LandingHeroBlock class="flex justify-center lg:ml-20"/>
+            <div class="bg-yellow-700 h-2/3">
+                <LandingHeroBlock class="flex justify-center"/>
             </div>
             <!-- results -->
-            <div class="h-1/3">
+            <div class="h-1/3 w-10/12 mx-auto">
                 <div class="inline-block mt-4 w-full">
                     <p class="text-xl bg-white text-center font-bold">Recent Quests</p>
                 </div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <div class="sm:w-1/12"></div>
+        <!-- <div class="w-1/12 sm:hidden"></div> -->
     </div>
     <LandingMailBox class="sm:p-10 sm:mt-10" />
     <LandingFooterBox />

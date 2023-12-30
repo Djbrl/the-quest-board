@@ -6,7 +6,6 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
   ],
-  buildModules : ['vue-slick-carousel/nuxt'],
   postcss: {
     plugins: {
       tailwindcss: {},

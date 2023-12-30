@@ -6,6 +6,15 @@ export const useResults = defineStore('results', () => {
   const { getHoursPassed, getMinutesPassed } = timestampConverter();
   const results = ref<any[]>([]);
   const sortedResults = ref<any[]>([]);
+  const visibleResults = ref<any[]>([]);
+
+  const setVisibleResults = (data:Array<any>) => {
+    visibleResults.value = data;
+  }
+
+  const getVisibleResults = () => {
+    return visibleResults.value;
+  }
 
   const setResults = (data:Array<any>) => {
     results.value = data;
@@ -55,7 +64,15 @@ export const useResults = defineStore('results', () => {
   }
 
   const getKeywordOccurence = (keyword:string) => {
-    sortedResults.value = results.value.filter(result => result.title.includes(keyword))
+    sortedResults.value = visibleResults.value.filter((result:any) => {
+      const title:string = result.title.toLowerCase()
+      if(title.includes(keyword.toLowerCase())){
+        return result
+      }
+    })
+    if(sortedResults.value.length === 0) {
+      return visibleResults.value
+    }
     return sortedResults.value
   }
 
@@ -78,5 +95,5 @@ export const useResults = defineStore('results', () => {
     return sortedKeywords.slice(0, 5);
   }
 
-  return { setResults, getResults, getSortedResults, getAll, getResultsCount, getToday, getLastHour, getTrending, getKeywordOccurence, getTop5KeywordMatches}
+  return { setResults, getResults, setVisibleResults, getVisibleResults, getSortedResults, getAll, getResultsCount, getToday, getLastHour, getTrending, getKeywordOccurence, getTop5KeywordMatches}
 })

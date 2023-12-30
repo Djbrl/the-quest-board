@@ -1,25 +1,27 @@
 <template>
-    <header class="w-full bg-blue-500 py-4">
-        <div class="flex bg-pink-600">
-            <!-- <div class="mr-auto"></div> -->
-            <div class="inline-block bg-yellow-500 mx-auto sm:mx-20">
-                <!-- Centering on small screens -->
-                <span class="text-3xl font-bold">artquestboard</span>
+    <header class="w-full bg-white py-4">
+        <div class="flex">
+            <div class="flex flex-col">
+                <div class="inline-block mx-auto sm:ml-20">
+                    <span class="text-5xl font-bold hover:cursor-pointer">thequestlobby</span>
+                    <div class="relative absolute bottom-[27px] right-[-5px] inline-block text-xs bg-red-500 text-white font-bold px-2 py-1">
+                        <p>beta</p>
+                    </div>
+                </div>
+    
+                <div class="my-auto inline-block sm:ml-20 sm:mr-auto flex">
+                    <div>
+                        <span class="font-lg bg-white hover:cursor-pointer hidden md:flex hover:underline text-sm">What's the quest lobby?</span>
+                    </div>
+                    <div class="mx-4">
+                        <span class="font-lg bg-white hover:cursor-pointer hidden md:flex hover:underline text-sm">Newsletter</span>
+                    </div>
+                    <div class="mr-10"></div>
+                </div>
             </div>
-            <!-- <div class="w-5/12 flex"></div> -->
-            <div class="bg-yellow-500 my-auto inline-block hidden sm:ml-auto sm:flex">
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mx-2">
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div>
-                    <span class="font-lg bg-white font-bold">newsletter</span>
-                </div>
-                <div class="mr-10"></div>
+            <div class="my-auto inline-block mr-20 sm:ml-auto flex">
+                <span class="font-lg bg-red-500 text-xl text-white hidden md:flex hover:cursor-pointer font-bold px-3 py-1">Sign In</span>
             </div>
-            <!-- <div class="w-1/12"></div> -->
         </div>
         </header>
 </template>

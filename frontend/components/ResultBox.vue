@@ -3,16 +3,13 @@
     <div @click="resetVisibleResults">
         <ResultsRecommendations :keywords="props.keywords"/>
     </div>
-    <!-- Profile Results -->
-    <!-- move them to the side
-    do sylish scroller -->
-    <div class="rounded-lg p-4 bg-blue-400/10">
-        <div v-for="result in visibleResults">
+    <div class="rounded-lg p-2 bg-blue-400/10">
+        <div v-for="result in sortEngine.getVisibleResults()">
             <ResultsJobCard :result="result"/>
         </div>
+        <ResultsResultLoader v-if="showLoader"/>
+        <ResultsMoreResultsLoader v-if="showMoreLoader" />
     </div>
-    <ResultsResultLoader v-if="showLoader"/>
-    <ResultsMoreResultsLoader v-if="showMoreLoader" />
 </template>
 <!-- look into having a stylish scroller and a -->
 <script setup lang="ts">
@@ -22,8 +19,6 @@ const props = defineProps<{ keywords: string[]; }>()
 const sortEngine = useResults()
 
 const searchInput = ref<HTMLInputElement | null>(null);
-const visibleResults = ref<any[]>([]);
-
 
 const showMoreLoader = ref(false)
 const showLoader = ref(false)
@@ -33,11 +28,11 @@ let startIndex = 0;
 
 const resetVisibleResults = () => {
     const sortedResults = sortEngine.getSortedResults()
-    visibleResults.value = []
+    sortEngine.setVisibleResults([])
     if (sortedResults.length > 10){
-        visibleResults.value = sortEngine.getSortedResults().slice(0, 10);
+        sortEngine.setVisibleResults(sortEngine.getSortedResults().slice(0, 10));
     } else {
-        visibleResults.value = sortEngine.getSortedResults();
+        sortEngine.setVisibleResults(sortEngine.getSortedResults());
     }
     startIndex = 10;
 }
@@ -56,7 +51,8 @@ onBeforeUnmount(() => {
 
 const showMoreResults = () => {
     const endIndex = startIndex + 10;
-    visibleResults.value = [...visibleResults.value, ...sortEngine.getSortedResults().slice(startIndex, endIndex)];
+    const currentVisibleResults = sortEngine.getVisibleResults()
+    sortEngine.setVisibleResults([...currentVisibleResults, ...sortEngine.getSortedResults().slice(startIndex, endIndex)]);
     startIndex = endIndex;
 }
 
@@ -65,10 +61,11 @@ const handleScroll = async () => {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollingDown = scrollY > lastScrollY.value;
+    const currentVisibleResults = sortEngine.getVisibleResults()
 
     lastScrollY.value = scrollY;
-    if ((scrollingDown && scrollY + windowHeight >= documentHeight) || (!scrollingDown && scrollY <= 20)) {
-        if (visibleResults.value.length < sortEngine.getSortedResults().length) {
+    if ((scrollingDown && scrollY + windowHeight >= documentHeight) || (!scrollingDown && scrollY <= 200)) {
+        if (currentVisibleResults.length < sortEngine.getSortedResults().length) {
             showMoreLoader.value = true;
             await new Promise((resolve) => setTimeout(resolve, 1000));
             showMoreLoader.value = false;
