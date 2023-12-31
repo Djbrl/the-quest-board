@@ -2,28 +2,28 @@
     <div class="animation-container">
         <div class="animation-content">
             <!-- Duplicate the content for infinite effect -->
-            <div class="text-4xl text-purple-400/40 font-semibold">
-                <p>r/HungryArtists</p>
-                <p>r/commissions</p>
-                <p>r/artcommissions</p>
-                <p>r/DesignJobs</p>
-                <p>r/hireanartist</p>
-                <p>r/fantasyartists</p>
-                <p>r/starvingartists</p>
-                <p>r/gameDevJobs</p>
-                <p>r/gameDevClassified</p>
+            <div class="text-4xl font-switzer text-violet-400/40 font-semibold">
+                <p class="hover:text-violet-400">r/HungryArtists</p>
+                <p class="hover:text-violet-400">r/commissions</p>
+                <p class="hover:text-violet-400">r/artcommissions</p>
+                <p class="hover:text-violet-400">r/DesignJobs</p>
+                <p class="hover:text-violet-400">r/hireanartist</p>
+                <p class="hover:text-violet-400">r/fantasyartists</p>
+                <p class="hover:text-violet-400">r/starvingartists</p>
+                <p class="hover:text-violet-400">r/gameDevJobs</p>
+                <p class="hover:text-violet-400">r/gameDevClassified</p>
             </div>
             <!-- Original content -->
-            <div class="text-4xl text-purple-400/40 font-semibold">
-                <p>r/HungryArtists</p>
-                <p>r/commissions</p>
-                <p>r/artcommissions</p>
-                <p>r/DesignJobs</p>
-                <p>r/hireanartist</p>
-                <p>r/fantasyartists</p>
-                <p>r/starvingartists</p>
-                <p>r/gameDevJobs</p>
-                <p>r/gameDevClassified</p>
+            <div class="text-4xl font-switzer text-violet-400/40 font-semibold">
+                <p class="hover:text-violet-400">r/HungryArtists</p>
+                <p class="hover:text-violet-400">r/commissions</p>
+                <p class="hover:text-violet-400">r/artcommissions</p>
+                <p class="hover:text-violet-400">r/DesignJobs</p>
+                <p class="hover:text-violet-400">r/hireanartist</p>
+                <p class="hover:text-violet-400">r/fantasyartists</p>
+                <p class="hover:text-violet-400">r/starvingartists</p>
+                <p class="hover:text-violet-400">r/gameDevJobs</p>
+                <p class="hover:text-violet-400">r/gameDevClassified</p>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
 .animation-container {
   overflow: hidden;
   height: 20rem; /* Adjust the height as needed */
-  width:400px; /* Adjust the height as needed */
+  width:350px; /* Adjust the height as needed */
 }
 
 .animation-content {

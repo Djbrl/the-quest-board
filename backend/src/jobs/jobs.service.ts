@@ -125,6 +125,7 @@ export class JobsService implements OnModuleInit {
             page = await this.browser.newPage();
         } catch (error) {
             console.log("Puppeteer Error :", error)
+            await this.browser.close();
             return ''
         }
     

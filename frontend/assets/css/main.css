@@ -3,6 +3,146 @@
 @tailwind utilities;
 @tailwind animation;
 
+/* Switzer */
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/switzer/Switzer-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/switzer/Switzer-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/switzer/Switzer-Extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('fonts/switzer/Switzer-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Pixel */
+@font-face {
+  font-family: 'Pixel';
+  src: url('fonts/pixel/Array-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Pixel';
+  src: url('fonts/pixel/Array-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Pixel';
+  src: url('fonts/pixel/Array-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Comico */
+@font-face {
+  font-family: 'Comico';
+  src: url('fonts/Comico_Complete/Fonts/OTF/Comico-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Zodiak */
+@font-face {
+  font-family: 'Zodiak';
+  src: url('fonts/Zodiak_Complete/Fonts/OTF/Zodiak-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Khand';
+  src: url('fonts/Zodiak_Complete/Fonts/OTF/Zodiak-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Khand */
+@font-face {
+  font-family: 'Khand';
+  src: url('fonts/khand/Khand-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Khand';
+  src: url('fonts/khand/Khand-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Khand';
+  src: url('fonts/khand/Khand-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Mona Sans */
+@font-face {
+  font-family: 'MonaSans';
+  src: url('fonts/mona-sans/OTF/MonaSans-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MonaSans';
+  src: url('fonts/mona-sans/OTF/MonaSans-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MonaSans';
+  src: url('fonts/mona-sans/OTF/MonaSans-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MonaSans';
+  src: url('fonts/mona-sans/OTF/MonaSans-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Martial Mono */
+@font-face {
+  font-family: 'MartialMono';
+  src: url('fonts/mono-main/otf/MartianMonoCondensed-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MartialMono';
+  src: url('fonts/mono-main/otf/MartianMonoCondensed-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MartialMono';
+  src: url('fonts/mono-main/otf/MartianMonoCondensed-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MartialMono';
+  src: url('fonts/mono-main/otf/MartianMonoCondensed-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
 @keyframes gradientShift {
     0% {
       background-position: 0% 50%;
@@ -15,3 +155,17 @@
     }
   }
   
+  @keyframes shine {
+    0% {
+      background-position: -200%;
+    }
+    100% {
+      background-position: 200%;
+    }
+  }
+  
+  .animate-shine {
+    background-size: 200% 100%;
+    background-position: -200%;
+    animation: shine 5s infinite;
+  }

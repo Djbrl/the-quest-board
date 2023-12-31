@@ -4,6 +4,7 @@ import { timestampConverter } from '~/composables/utils';
 
 export const useResults = defineStore('results', () => {
   const { getHoursPassed, getMinutesPassed } = timestampConverter();
+  const lightMode = ref(false);
   const results = ref<any[]>([]);
   const sortedResults = ref<any[]>([]);
   const visibleResults = ref<any[]>([]);
@@ -64,14 +65,14 @@ export const useResults = defineStore('results', () => {
   }
 
   const getKeywordOccurence = (keyword:string) => {
-    sortedResults.value = visibleResults.value.filter((result:any) => {
+    sortedResults.value = results.value.filter((result:any) => {
       const title:string = result.title.toLowerCase()
       if(title.includes(keyword.toLowerCase())){
         return result
       }
     })
     if(sortedResults.value.length === 0) {
-      return visibleResults.value
+      return []
     }
     return sortedResults.value
   }
@@ -95,5 +96,16 @@ export const useResults = defineStore('results', () => {
     return sortedKeywords.slice(0, 5);
   }
 
-  return { setResults, getResults, setVisibleResults, getVisibleResults, getSortedResults, getAll, getResultsCount, getToday, getLastHour, getTrending, getKeywordOccurence, getTop5KeywordMatches}
+  const toggleLightMode = () => {
+    lightMode.value = !lightMode.value
+  }
+
+  const getCurrentTheme = () => {
+    if (lightMode.value === true){
+      return 'light'
+    } else {
+      return 'dark'
+    }
+  }
+  return { getCurrentTheme, toggleLightMode, setResults, getResults, setVisibleResults, getVisibleResults, getSortedResults, getAll, getResultsCount, getToday, getLastHour, getTrending, getKeywordOccurence, getTop5KeywordMatches}
 })

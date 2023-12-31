@@ -9,8 +9,17 @@ export default {
     "./error.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        switzer: ['Switzer', 'sans-serif'],
+        comico: ['Comico', 'sans-serif'],
+        zodiak: ['Zodiak', 'sans-serif'],
+        khand: ['Khand', 'sans-serif'],
+        pixel: ['Pixel', 'sans-serif'],
+        monaSans: ['MonaSans', 'sans-serif'],
+        martialMono: ['MartialMono', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }
-

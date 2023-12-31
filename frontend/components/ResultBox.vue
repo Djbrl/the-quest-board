@@ -3,12 +3,14 @@
     <div @click="resetVisibleResults">
         <ResultsRecommendations :keywords="props.keywords"/>
     </div>
-    <div class="rounded-lg p-2 bg-blue-400/10">
+    <div class="p-2">
         <div v-for="result in sortEngine.getVisibleResults()">
             <ResultsJobCard :result="result"/>
         </div>
-        <ResultsResultLoader v-if="showLoader"/>
-        <ResultsMoreResultsLoader v-if="showMoreLoader" />
+        <ResultsResultLoader class="mb-3 mt-5" v-if="showLoader"/>
+        <div class="flex justify-center">
+            <p @click="loadMoreResults()" v-if="showMore" class="text-stone-300 border hover:cursor-pointer hover:bg-stone-800 border-stone-700 px-2 py-1 mx-auto inline-block">More Results</p>
+        </div>
     </div>
 </template>
 <!-- look into having a stylish scroller and a -->
@@ -20,9 +22,8 @@ const sortEngine = useResults()
 
 const searchInput = ref<HTMLInputElement | null>(null);
 
-const showMoreLoader = ref(false)
+const showMore = ref(false)
 const showLoader = ref(false)
-const lastScrollY = ref(0);
 
 let startIndex = 0;
 
@@ -39,40 +40,35 @@ const resetVisibleResults = () => {
 
 onMounted(() => {
     showMoreResults();
-    window.addEventListener('scroll', handleScroll);
+    // window.addEventListener('scroll', handleScroll);
     if (searchInput.value !== null){
         searchInput.value.focus()
     }
 });
 
 onBeforeUnmount(() => {
-    window.removeEventListener('scroll', handleScroll);
+    // window.removeEventListener('scroll', handleScroll);
 });
 
 const showMoreResults = () => {
-    const endIndex = startIndex + 10;
+    const endIndex = startIndex + 15;
     const currentVisibleResults = sortEngine.getVisibleResults()
     sortEngine.setVisibleResults([...currentVisibleResults, ...sortEngine.getSortedResults().slice(startIndex, endIndex)]);
     startIndex = endIndex;
+    if (endIndex > sortEngine.getSortedResults().length){
+        showMore.value = false
+    } else {
+        showMore.value = true
+    }
 }
 
-const handleScroll = async () => {
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollingDown = scrollY > lastScrollY.value;
-    const currentVisibleResults = sortEngine.getVisibleResults()
-
-    lastScrollY.value = scrollY;
-    if ((scrollingDown && scrollY + windowHeight >= documentHeight) || (!scrollingDown && scrollY <= 200)) {
-        if (currentVisibleResults.length < sortEngine.getSortedResults().length) {
-            showMoreLoader.value = true;
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            showMoreLoader.value = false;
-            showMoreResults();
-        }
-    }
-};
+const loadMoreResults = async () => {
+    showMore.value = false;
+    showLoader.value = true;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    showLoader.value = false;
+    showMoreResults();
+}
 
 
 </script>

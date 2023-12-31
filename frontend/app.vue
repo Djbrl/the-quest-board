@@ -1,11 +1,31 @@
 
 <template>
-  <div>
-    <LandingPage :keywords="artFreelancerKeywords" />
+  <div class="">
+    <div v-if="showAppLoader" class="absolute top-0 left-0 w-full h-full bg-stone-900 flex flex-col items-center justify-center">
+      <div class="p-4 border border-stone-700">
+        <div class="mx-auto">
+          <span class="text-5xl font-switzer text-stone-300 font-bold hover:cursor-pointer">thequestboard</span>
+          <div class="relative font-switzer absolute bottom-[27px] right-[1px] inline-block text-xs text-stone-300 font-bold px-2 py-1">
+              <p>beta</p>
+          </div>
+        </div>
+        <ResultsResultLoader class="mx-auto"/>
+      </div>  
+    </div>
+    <LandingPage v-show="!showAppLoader" :keywords="artFreelancerKeywords" />
   </div>
 </template>
 
 <script setup lang="ts">
+const showAppLoader = ref(true)
+onBeforeMount(() => {
+    showAppLoader.value = true
+})
+
+onMounted(() => {
+  showAppLoader.value = false
+})
+
 const artFreelancerKeywords: string[] = [
     'Concept Artist',
     'Illustrator',
