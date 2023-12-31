@@ -1,0 +1,55 @@
+version: "3.3"
+
+services:
+
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=postgres
+  #   networks:
+  #     - sus-meter
+
+  backend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    # image: node:18-alpine
+    restart: always
+    command: npm start
+    working_dir: /backend
+    volumes:
+      - /backend
+    ports:
+      - 3001:3000
+      # - ${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}
+    networks:
+      - thequestboard
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    # image: node:18-alpine
+    restart: always
+    command: npm run dev
+    working_dir: /frontend
+    volumes:
+      - /frontend
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+      # - ${FRONTEND_HOST_PORT}:${FRONTEND_CONTAINER_PORT}
+    networks:
+      - thequestboard
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  thequestboard:
+    driver: bridge
