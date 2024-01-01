@@ -1,34 +1,29 @@
-# Use a base image with the necessary runtime (e.g., Node.js)
-FROM node:18-alpine
+FROM node:slim
 
-RUN mkdir /backend
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
-# Set the working directory in the container
+# https://dev.to/cloudx/how-to-use-puppeteer-inside-a-docker-container-568c
+RUN apt-get update && apt-get install gnupg wget -y && \
+    wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+    apt-get update && \
+    apt-get install google-chrome-stable -y --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /backend
 
-# Install necessary dependencies for Puppeteer
-RUN apk --no-cache add \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont
+# necessary to avoid unsupported root with --no-sandbox error puppeteer
+RUN adduser --disabled-password --gecos '' server
+RUN chown -R server:server /backend
 
-RUN npm install puppeteer
+USER server
 
-# Copy package.json and package-lock.json to the working directory
 COPY package.json .
-# COPY package-lock.json .
 
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the container
 COPY . .
 
-# Expose the port your app will run on
 EXPOSE 3000
 
-# Command to run your application
 CMD ["npm", "start"]

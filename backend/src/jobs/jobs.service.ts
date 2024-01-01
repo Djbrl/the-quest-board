@@ -80,14 +80,15 @@ export class JobsService implements OnModuleInit {
         }
         const fields = post.split("&quot;");
         const forhireRegex = /\[for hire\]|for_hire|_open|for_work|looking_for_[a-zA-Z0-9_]+_projects|hire_me_/i;
-        const hiringRegex= /hiring_|request_|looking_for_an_|looking_to_commission|looking_to_hire|seeking_artist|seeking_an_|/i;
+        const hiringRegex= /hiring_|request_|looking_for_an_|looking_to_commission|looking_to_hire|seeking_artist|seeking_an_/i;
         const subredditRegex = /\/r\/([^\/]+)/;
         
         const job: any = { url:'', title:'', subreddit:'', date:'', timestamp:'', is_nsfw:'', comments:'', upvotes: ''};
         for (let i = 0; i < fields.length; i++) {
           if (fields[i] === 'url') {
-            if (forhireRegex.test(fields[i + 2]) && !(/hiring_/).test(fields[i + 2])) continue ;
-            if (!hiringRegex.test(fields[i + 2])) continue ;
+            // if (forhireRegex.test(fields[i + 2])) return null ;
+            if (!hiringRegex.test(fields[i + 2]) || forhireRegex.test(fields[i + 2])) return null ;
+            console.log('url value:',fields[i+2],'\nregex value : ',hiringRegex.test(fields[i + 2]),'\nregex forhire value : ', forhireRegex.test(fields[i + 2]))
             job.url = (fields[i + 2]);
             job.subreddit = fields[i + 2].match(subredditRegex);
           }
@@ -131,7 +132,7 @@ export class JobsService implements OnModuleInit {
     
         console.log("going to page...")
         try {
-            await page.goto(url, { waitUntil: 'domcontentloaded' });
+            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
         } catch (error) {
             console.log('Puppeteer Error :', error)
             return ''
@@ -163,11 +164,12 @@ export class JobsService implements OnModuleInit {
         const pages = await Promise.all(fetchPromises);
         for (const page of pages) {
           if (page === ''){
-            console.log("Couldn't fetch, skipping...")
+            console.log("Couldn't fetch, skipping this url...")
             continue ;
           }
           const pageData = page.split('</head>')[1].split('\n');
           const hiringPosts = pageData.filter(line => line.includes('<faceplate-tracker source="search" action="view" noun="post"'));
+          console.log('post processing')
           const jobPromises = hiringPosts.map(post => this.processPost(post));
           const jobsArray = (await Promise.all(jobPromises)).filter(job => job !== null);
           allJobsArray.push(...jobsArray);

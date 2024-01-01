@@ -14,7 +14,7 @@ services:
 
   backend:
     build:
-      context: ./frontend
+      context: ./backend
       dockerfile: Dockerfile
     # image: node:18-alpine
     restart: always
