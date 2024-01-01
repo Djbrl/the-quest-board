@@ -79,8 +79,8 @@ export class JobsService implements OnModuleInit {
             return null
         }
         const fields = post.split("&quot;");
-        const forhireRegex = /\[for hire\]|for_hire|_open|for_work|looking_for_[a-zA-Z0-9_]+_projects|hire_me_/i;
-        const hiringRegex= /hiring_|request_|looking_for_an_|looking_to_commission|looking_to_hire|seeking_artist|seeking_an_/i;
+        const forhireRegex = /for_hire|hire_me_|_writer|_ux_|_ui_|_uxui|_uiux|_web|_branding|user_experience|graphic_design|_unity|_ue5|unreal_engine|_programmer/i;
+        const hiringRegex= /\/hiring_|\/client_|\/request_|\/patron_|\/paid_|looking_for_an_|l4_artist|lf_artist|who_can|looking_for_[a-zA-Z0-9_]+_artist|looking_for_[a-zA-Z0-9_]+_animator|looking_to_commission|looking_to_hire|looking_to_have|looking_to_get|seeking_[a-zA-Z0-9_]+_artist|seeking_artist|seeking_an_/i;
         const subredditRegex = /\/r\/([^\/]+)/;
         
         const job: any = { url:'', title:'', subreddit:'', date:'', timestamp:'', is_nsfw:'', comments:'', upvotes: ''};
@@ -88,7 +88,6 @@ export class JobsService implements OnModuleInit {
           if (fields[i] === 'url') {
             // if (forhireRegex.test(fields[i + 2])) return null ;
             if (!hiringRegex.test(fields[i + 2]) || forhireRegex.test(fields[i + 2])) return null ;
-            console.log('url value:',fields[i+2],'\nregex value : ',hiringRegex.test(fields[i + 2]),'\nregex forhire value : ', forhireRegex.test(fields[i + 2]))
             job.url = (fields[i + 2]);
             job.subreddit = fields[i + 2].match(subredditRegex);
           }
@@ -140,7 +139,8 @@ export class JobsService implements OnModuleInit {
         
         console.log("scrolling...")
         for (let i = 0; i < 1; i++) {
-          await page.evaluate(() => {
+          await page.evaluate( async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             window.scrollTo(0, document.body.scrollHeight);
           });
         }

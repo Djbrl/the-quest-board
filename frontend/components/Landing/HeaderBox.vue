@@ -16,9 +16,6 @@
                     <div class="mx-4">
                         <span class="font-switzer text-stone-400 hover:text-stone-300 hover:cursor-pointer hidden md:flex text-sm">Support us on Ko-Fi</span>
                     </div>
-                    <div class="mr-4">
-                        <span class="font-switzer text-stone-400 hover:text-stone-300 hover:cursor-pointer hidden md:flex text-sm">What's the quest lobby?</span>
-                    </div>
                     <div @click="toggleLightMode()">
                         <span class="font-switzer text-stone-400 hover:text-stone-300 hover:cursor-pointer hidden md:flex text-sm">Light Mode</span>
                     </div>

@@ -31,10 +31,13 @@ const resetVisibleResults = () => {
     const sortedResults = sortEngine.getSortedResults()
     sortEngine.setVisibleResults([])
     if (sortedResults.length > 10){
-        sortEngine.setVisibleResults(sortEngine.getSortedResults().slice(0, 10));
+        sortEngine.setVisibleResults(sortedResults.slice(0, 10));
     } else {
-        sortEngine.setVisibleResults(sortEngine.getSortedResults());
+        sortEngine.setVisibleResults(sortedResults);
     }
+    if (sortEngine.getVisibleResults().length >= sortedResults.length) {
+        showMore.value = false
+     } else showMore.value = true;
     startIndex = 10;
 }
 

@@ -10,6 +10,19 @@
         <p class="text-center px-2 py-1 text-stone-300 font-pixel text-3xl">No results.</p>
         <p class="text-center px-2 py-1 text-stone-300 text">There might be an issue in the back, try <span class="italic">refreshing</span> or come back in a bit.</p>
     </div>
+    <div class="flex justify-center inline-block">
+        <p class="text-xs text-stone-500 px-4 py-1 text-center hover:cursor-pointer hover:text-stone-300 underline"
+           @mouseover="showTooltip = true"
+           @mouseout="showTooltip = false">
+          Why are you some results missing?
+        </p>
+    </div>
+    <div class="relative bg-red-500 inline-block flex justify-center max-w-[300px] mx-auto">
+        <div v-show="showTooltip" class="absolute bottom-[-170px] left-[100px] bg-stone-900 border border-stone-700 text-stone-300 p-3">
+          <!-- Tooltip content goes here -->
+        <p class="text-xs"><span class="font-bold">thequestboard</span> only displays SFW results that are relevant to digital and traditional artists. Posts that pertain to graphic design, UX/UI, writing and that are tagged as NSFW aren't included. Additionally incorrectly titled posts cannot be detected by our algorithm.</p>
+        </div>
+    </div>
     <!-- <div class="flex justify-center">
         <div v-for="keyword in sortEngine.getTop5KeywordMatches(props.keywords)" class="">
             <p @click="updateResults(keyword)" class="px-2 py-1 mx-1 hover:cursor-pointer text-stone-300 hover:text-stone-400 inline-block text-xs"> {{ keyword }}</p>
@@ -23,6 +36,7 @@ import { useResults } from '#imports';
 const currentSort = ref('all')
 const searchQuery = ref('')
 const showNoResults = ref(false)
+const showTooltip = ref(false)
 const props = defineProps<{
     keywords: Array<string>,
 }>()
