@@ -20,9 +20,15 @@ USER server
 
 COPY package.json .
 
+COPY prisma/ .
+
 RUN npm install
 
 COPY . .
+
+USER root
+RUN chown -R server:server /backend
+USER server
 
 EXPOSE 3000
 

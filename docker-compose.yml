@@ -2,15 +2,19 @@ version: "3.3"
 
 services:
 
-  # db:
-  #   image: postgres
-  #   restart: always
-  #   volumes:
-  #     - db-data:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_PASSWORD=postgres
-  #   networks:
-  #     - sus-meter
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=LR59caK4V9JA16Xga6jtQYl3
+      - POSTGRES_USER=server
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+    networks:
+      - thequestboard
 
   backend:
     build:
@@ -18,15 +22,21 @@ services:
       dockerfile: Dockerfile
     # image: node:18-alpine
     restart: always
-    command: npm start
+    command: bash -c "npx prisma db push && npx prisma migrate deploy --schema=prisma/schema.prisma && npx prisma generate && npm start"
     working_dir: /backend
     volumes:
       - /backend
+    # environment:
+    #   - DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_USER}?schema=public"
     ports:
       - 3001:3000
+      - 5555:5555
+      - 5556:5556
       # - ${BACKEND_HOST_PORT}:${BACKEND_CONTAINER_PORT}
     networks:
       - thequestboard
+    depends_on:
+      - db
 
   frontend:
     build:

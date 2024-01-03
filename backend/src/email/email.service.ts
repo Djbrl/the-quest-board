@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer'
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 @Injectable()
 export class EmailService {
-    constructor() {}
+    private readonly prisma: PrismaClient;
+
+    constructor() {
+      this.prisma = new PrismaClient();
+    }
 
     generateCardGrid(allJobsArray: any[]): string {
     
@@ -114,5 +121,26 @@ export class EmailService {
       
         await transporter.sendMail(mailOptions);
       }
-    
+
+      async subscribe(email: string): Promise<any> {
+        const reso = await prisma.mailingList.findMany({})
+        for (const result in reso){
+          console.log(reso[result].email)
+          if (reso[result].email === email) {
+            return {ok:true, errorMessage: 'NonUnique'}
+          }
+        }
+        try {
+          const res = await prisma.mailingList.create({
+            data: {
+              email,
+            },
+          });
+          console.log(res)
+        } catch (error) {
+          console.log(error)
+          return {ok:true, errorMessage: 'DbError'}
+        }
+        return {ok:false, errorMessage: ''}
+      }
 }

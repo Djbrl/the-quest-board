@@ -1,7 +1,6 @@
 import { Injectable, OnApplicationShutdown, OnModuleInit, OnModuleDestroy, Scope } from '@nestjs/common';
 import { EmailService } from './email/email.service';
 import { JobsService } from './jobs/jobs.service';
-import * as puppeteer from 'puppeteer';
 
 @Injectable({ scope: Scope.DEFAULT }) // Set the scope to singleton
 export class AppService implements OnApplicationShutdown, OnModuleInit, OnModuleDestroy {

@@ -26,7 +26,7 @@ onMounted(() => {
   showAppLoader.value = false
 })
 
-const artFreelancerKeywords: string[] = [
+const artFreelancerKeywords: Array<string> = [
     'Concept Artist',
     'Illustrator',
     'Emote Artist',

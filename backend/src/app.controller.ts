@@ -1,6 +1,7 @@
-import { Controller, Get, Req, Scope } from '@nestjs/common';
+import { Controller, Get, Query, Req, Scope } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request } from 'express'
+import { EmailService } from './email/email.service';
 
 interface cachedResponse {
   jobs : Array<any>,
@@ -17,8 +18,14 @@ export class AppController {
   private readonly startTime:number;
   private requestHistory = [];
 
-  constructor(private readonly appService: AppService,) {
+  constructor(private readonly appService: AppService, private readonly emailService: EmailService) {
     this.startTime = Date.now()
+  }
+
+  @Get('/subscribeToMailingList')
+  async subToMailingList(@Query('email') email: string): Promise<any>{
+    return await this.emailService.subscribe(email)
+    
   }
 
   @Get('/getQuests')

@@ -20,7 +20,7 @@
     <div class="relative bg-red-500 inline-block flex justify-center max-w-[300px] mx-auto">
         <div v-show="showTooltip" class="absolute bottom-[-170px] left-[100px] bg-stone-900 border border-stone-700 text-stone-300 p-3">
           <!-- Tooltip content goes here -->
-        <p class="text-xs"><span class="font-bold">thequestboard</span> only displays SFW results that are relevant to digital and traditional artists. Posts that pertain to graphic design, UX/UI, writing and that are tagged as NSFW aren't included. Additionally incorrectly titled posts cannot be detected by our algorithm.</p>
+        <p class="text-xs"><span class="font-bold">thequestboard</span> only displays SFW results that are relevant to digital and traditional artists. Posts that pertain to graphic design, UX/UI, writing or that are tagged as NSFW aren't included. Additionally, incorrectly titled posts cannot be detected by our algorithm.</p>
         </div>
     </div>
     <!-- <div class="flex justify-center">
