@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
     # image: node:18-alpine
     restart: always
-    command: bash -c "npx prisma db push && npx prisma migrate deploy --schema=prisma/schema.prisma && npx prisma generate && npm start"
+    command: bash -c "npx prisma generate && npx prisma migrate deploy --schema=prisma/schema.prisma && npm start"
     working_dir: /backend
     volumes:
       - /backend

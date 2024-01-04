@@ -47,7 +47,7 @@ export class JobsService implements OnModuleInit {
     private async initializePuppeteer() {
         console.log("Initializing Puppeteer...");
         try {
-            this.browser = await puppeteer.launch({ headless: "new" , protocolTimeout: 30000});
+            this.browser = await puppeteer.launch({args: ['--no-sandbox'], headless: "new" , protocolTimeout: 90000});
         } catch (error) {
             console.log("An error occured with Puppeteer : ", error)
         }
