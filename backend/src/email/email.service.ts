@@ -48,13 +48,13 @@ export class EmailService {
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: process.env.EMAIL,
+            user: process.env.APP_EMAIL,
             pass: process.env.APP_PASS
           }
         });
       
         const mailOptions = {
-          from: process.env.EMAIL,
+          from: process.env.APP_EMAIL,
           to: 'sydismyname123@gmail.com',
           subject,
           html: `
@@ -125,9 +125,11 @@ export class EmailService {
       async subscribe(email: string): Promise<any> {
         const reso = await prisma.mailingList.findMany({})
         for (const result in reso){
-          console.log(reso[result].email)
           if (reso[result].email === email) {
-            return {ok:true, errorMessage: 'NonUnique'}
+            return {
+              ok:false,
+              errorMessage: 'NonUnique'
+            }
           }
         }
         try {
@@ -136,11 +138,9 @@ export class EmailService {
               email,
             },
           });
-          console.log(res)
         } catch (error) {
-          console.log(error)
-          return {ok:true, errorMessage: 'DbError'}
+          return { ok:false, errorMessage: 'DbError' }
         }
-        return {ok:false, errorMessage: ''}
+        return { ok:true, errorMessage: '' }
       }
 }

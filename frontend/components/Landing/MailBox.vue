@@ -24,15 +24,15 @@ const showInvalidEmail = ref(false)
 
 const subscribeToMailingList = async (email:string) => {
   const emailRegex=/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/
-  if (email === ''){
-    return ;
-  }
-  if (emailRegex.test(email)){
+  if (email === '') return ;
+  if (emailRegex.test(email)) {
     showInvalidEmail.value = true
     return
   }
+
   emailEntered.value = true
   showInvalidEmail.value = false
+
   let response:any;
   try {
     response = await fetch(`http://localhost:3001/subscribeToMailingList?email=${email}`);
@@ -40,11 +40,10 @@ const subscribeToMailingList = async (email:string) => {
           throw new Error('');
     }
     const res = await response.json()
-
-    console.log(res)
-    if (res.ok === true) {
+    if (res.ok === false) {
       if (res.errorMessage === 'NonUnique') {
         showDupError.value = true
+        emailField.value = ''
       } else {
         showDbError.value = true
       }
@@ -52,9 +51,7 @@ const subscribeToMailingList = async (email:string) => {
       showConfirmation.value = true
     }
   } catch (error) {
-    console.log(error)
     showDbError.value = true
-    return 'Fetch failed'
   }
 }
 </script>

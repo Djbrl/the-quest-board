@@ -13,7 +13,7 @@
         </div>
     </div>
 </template>
-<!-- look into having a stylish scroller and a -->
+
 <script setup lang="ts">
 import { useResults } from '~/stores/resultsState';
 
@@ -43,14 +43,12 @@ const resetVisibleResults = () => {
 
 onMounted(() => {
     showMoreResults();
-    // window.addEventListener('scroll', handleScroll);
     if (searchInput.value !== null){
         searchInput.value.focus()
     }
 });
 
 onBeforeUnmount(() => {
-    // window.removeEventListener('scroll', handleScroll);
 });
 
 const showMoreResults = () => {
