@@ -1,9 +1,9 @@
 <template>
     <div class="flex justify-center text-stone-300 mt-5 text-xs my-auto">
-        <p @click="pickCurrentSort('today')" :class="{ 'px-2 py-1 text-stone-200 mx-1 border border-stone-700 hover:cursor-pointer': currentSort === 'today', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'today'}">Today</p>
-        <p @click="pickCurrentSort('trending')" :class="{ 'px-2 py-1 mx-1 text-stone-200 border border-stone-700 hover:cursor-pointer': currentSort === 'trending', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'trending' }">Trending</p>
-        <p @click="pickCurrentSort('lastHour')" :class="{ 'px-2 py-1 mx-1 text-stone-200 border border-stone-700 hover:cursor-pointer': currentSort === 'lastHour', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'lastHour' }">Last hour</p>
-        <p @click="pickCurrentSort('all')" :class="{ 'px-2 py-1 mx-1 text-stone-200 border border-stone-700 hover:cursor-pointer': currentSort === 'all', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'all' }">All</p>
+        <p @click="pickCurrentSort('today')" :class="{ 'px-2 py-1 text-stone-200 mx-1 border border-stone-600 hover:cursor-pointer': currentSort === 'today', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'today'}">Today</p>
+        <p @click="pickCurrentSort('trending')" :class="{ 'px-2 py-1 mx-1 text-stone-200 border border-stone-600 hover:cursor-pointer': currentSort === 'trending', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'trending' }">Trending</p>
+        <p @click="pickCurrentSort('lastHour')" :class="{ 'px-2 py-1 mx-1 text-stone-200 border border-stone-600 hover:cursor-pointer': currentSort === 'lastHour', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'lastHour' }">Last hour</p>
+        <p @click="pickCurrentSort('all')" :class="{ 'px-2 py-1 mx-1 text-stone-200 border border-stone-600 hover:cursor-pointer': currentSort === 'all', 'px-2 py-1 mx-1 hover:text-stone-400 border border-stone-700/10 hover:cursor-pointer': currentSort !== 'all' }">All</p>
     </div>
     <input v-model="searchQuery" ref="searchInput" @keyup.enter="updateResults(searchQuery)" class="my-4 px-4 py-2 flex inline-block text-sm bg-stone-900 w-80 border border-stone-700 outline-none placeholder-stone-500 text-stone-400 mx-auto" placeholder="Search by keyword" />
     <div v-if="showNoResults" class="inline-block flex flex-col justify-center">
@@ -14,7 +14,7 @@
         <p class="text-xs text-stone-500 px-4 py-1 text-center hover:cursor-pointer hover:text-stone-300 underline"
            @mouseover="showTooltip = true"
            @mouseout="showTooltip = false">
-          Why are you some results missing?
+          Why are you some posts missing?
         </p>
     </div>
     <div class="relative bg-red-500 inline-block flex justify-center max-w-[300px] mx-auto">

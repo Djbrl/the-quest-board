@@ -9,7 +9,7 @@
         </div>
         <ResultsResultLoader class="mb-3 mt-5" v-if="showLoader"/>
         <div class="flex justify-center">
-            <p @click="loadMoreResults()" v-if="showMore" class="text-stone-300 border hover:cursor-pointer hover:bg-stone-800 border-stone-700 px-2 py-1 mx-auto inline-block">More Results</p>
+            <p @click="loadMoreResults()" v-if="showMore" class="bg-stone-200 hover:cursor-pointer hover:bg-stone-100 font-bold px-3 py-1 mx-auto inline-block">Show More</p>
         </div>
     </div>
 </template>

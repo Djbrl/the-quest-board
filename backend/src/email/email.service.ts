@@ -23,11 +23,11 @@ export class EmailService {
         .map(job => {
           return `
             <div class="card">
-              <a href=${'https://reddit.com' + job.url} class="card-title">${job.title}</a>
-              <div class="card-content">
-                <div><strong>Subreddit</strong> ${job.url.split('/')[2]}</div>
-                <div><strong>Date:</strong> ${job.date}</div>
-                <div><strong>Comments:</strong> ${job.comments}</div>
+            <a href=${'https://reddit.com' + job.url} class="card-title" style="color: #dbdbdb;">${job.title}</a>
+            <div class="card-content">
+                <div style="color: #dbdbdb;"><strong>Subreddit</strong> ${job.url.split('/')[2]}</div>
+                <div style="color: #dbdbdb;"><strong>Date:</strong> ${job.date}</div>
+                <div style="color: #dbdbdb;"><strong>Comments:</strong> ${job.comments}</div>
                 <!-- Add more details as needed -->
               </div>
             </div>
@@ -48,8 +48,8 @@ export class EmailService {
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: process.env.APP_EMAIL,
-            pass: process.env.APP_PASS
+            user: process.env.APP_EMAIL || 'artquestboard@gmail.com',
+            pass: process.env.APP_PASS || 'rlczokbflkgjqxmj'
           }
         });
       
@@ -64,59 +64,122 @@ export class EmailService {
                   body {
                     background-color: transparent;
                   }
+                  
+                  .email-logo {
+                    font-family: "Helvetica", sans-serif;
+                    font-weight: bold;
+                    font-size:50px;
+                    margin-bottom: 15px;
+                    text-align: center;
+                    color: #e3dede;
+                  }
+                  
+                  .email-body {
+                    margin-top: 30px;
+                    margin-bottom: 20px;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    color: #e3dede;
+                    font-family: "Helvetica", sans-serif;
+                  }
+                  
+                  .email-text {
+                    font-family: "Helvetica", sans-serif;
+                    color: #e3dede;
+                  }
+                  
                   .email-container {
-                    background-color: white;
+                    text-align: center;
+                    background-color: #292626;
                     padding: 20px;
                     border-radius: 10px;
                   }
+                  
                   .email-title {
+                    font-family: "Helvetica", sans-serif;
                     font-size: 24px;
                     font-weight: bold;
                     text-align: center;
-                    margin-bottom: 20px;
+                    margin-bottom: 10px;
                     display: block;
                   }
+                  
                   .grid-container {
                     display: grid;
                     grid-template-columns: repeat(2, 1fr);
                     gap: 16px;
                   }
+                  
                   @media (max-width: 400px) {
                     .grid-container {
                       grid-template-columns: 1fr;
                     }
                   }
+                  
                   .card {
-                    background-color: #f0f0f0;
-                    border-radius: 8px;
+                    text-align: left;
+                    border: 1px solid #5e5c5c;
                     padding: 16px;
                     margin-bottom: 16px;
                   }
+                  
                   .card-title {
                     font-size: 18px;
                     font-weight: bold;
                     margin-bottom: 8px;
                   }
+                  
+                  .card-title:hover {
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-bottom: 8px;
+                    text-decoration: underline;
+                    color: white;
+                  }
+
                   .card-content {
                     font-size: 14px;
                   }
+                  
                   .footer-link {
-                    margin-top: 20px;
+                    margin-top: 10px;
                     text-align: center;
+                    font-weight: bold;
+                  }
+                  
+                  a {
+                    color: #dbdbdb;
+                    text-decoration: none;
+                    font-size:13px;
+                  }
+            
+                  a:hover {
+                    text-decoration: underline;
                   }
                 </style>
               </head>
               <body>
                 <div class="email-container">
-                  <span>Welcome back traveler ! New quests are available at the town hall. Come through and grab one ! <br></span>
-                  <span class="email-title">Your Quests</span>
-                  ${html}
-                  <div class="footer-link">
-                    <a href="https://www.reddit.com">Visit Reddit</a>
+                  <div class="email-logo">
+                    <span>thequestboard</span>
+                  </div>
+                  <span class="email-text">New quests are on the board ! Make your move while they're still fresh.<br></span>
+                  <div class="email-body">
+                    <span class="email-title">Your Quests</span>
+                      ${html}
+                      <div class="footer-link">
+                        <a href="https://artquestboard.com" style="color: #dbdbdb; font-weight: bold;">See All Recent Quests</a>
+                      </div>
+                      <div class="footer-link">
+                        <a href="https://artquestboard.com">Unsubscribe</a>
+                      </div>
                   </div>
                 </div>
               </body>
-            </html>`
+            </html>
+          `
         };
       
         await transporter.sendMail(mailOptions);
@@ -143,4 +206,34 @@ export class EmailService {
         }
         return { ok:true, errorMessage: '' }
       }
+
+      async unsubscribe(email: string): Promise<any> {
+        try {
+          const existingEntry = await prisma.mailingList.findUnique({
+            where: { email },
+          });
+      
+          if (!existingEntry) {
+            return {
+              ok: false,
+              errorMessage: 'NotFound',
+            };
+          }
+      
+          await prisma.mailingList.delete({
+            where: { email },
+          });
+      
+          return {
+            ok: true,
+            errorMessage: '',
+          };
+        } catch (error) {
+          return {
+            ok: false,
+            errorMessage: 'DbError',
+          };
+        }
+      }
+      
 }
