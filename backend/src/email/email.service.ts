@@ -170,10 +170,10 @@ export class EmailService {
                     <span class="email-title">Your Quests</span>
                       ${html}
                       <div class="footer-link">
-                        <a href="https://artquestboard.com" style="color: #dbdbdb; font-weight: bold;">See All Recent Quests</a>
+                        <a href="http://localhost:3000" style="color: #dbdbdb; font-weight: bold;">See All Recent Quests</a>
                       </div>
                       <div class="footer-link">
-                        <a href="https://artquestboard.com">Unsubscribe</a>
+                        <a href="http://localhost:3000">Unsubscribe</a>
                       </div>
                   </div>
                 </div>

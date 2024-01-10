@@ -25,7 +25,11 @@ export class AppController {
   @Get('/subscribeToMailingList')
   async subToMailingList(@Query('email') email: string): Promise<any>{
     return await this.emailService.subscribe(email)
-    
+  }
+
+  @Get('/unsubscribe')
+  async unsubscribe(@Query('email') email: string): Promise<any>{
+    return await this.emailService.unsubscribe(email)
   }
 
   @Get('/getQuests')

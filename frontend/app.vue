@@ -1,6 +1,7 @@
 
 <template>
-  <div class="">
+  <NuxtLayout>
+    <!-- <NuxtPage/> -->
     <div v-if="showAppLoader" class="absolute top-0 left-0 w-full h-full bg-stone-900 flex flex-col items-center justify-center">
       <div class="p-4 border border-stone-700">
         <div class="mx-auto">
@@ -12,8 +13,10 @@
         <ResultsResultLoader class="mx-auto"/>
       </div>  
     </div>
-    <LandingPage v-show="!showAppLoader" :keywords="artFreelancerKeywords" />
-  </div>
+    <NuxtPage v-else :keywords="artFreelancerKeywords"/>
+  </NuxtLayout>
+    <!-- <LandingPage v-show="!showAppLoader" :keywords="artFreelancerKeywords" /> -->
+
 </template>
 
 <script setup lang="ts">

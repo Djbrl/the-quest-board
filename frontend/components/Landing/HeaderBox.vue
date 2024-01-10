@@ -3,7 +3,7 @@
         <div class="flex">
             <div class="flex flex-col">
                 <div class="inline-block mx-auto sm:ml-20">
-                    <span class="text-5xl font-switzer text-stone-300 font-bold hover:cursor-pointer">thequestboard</span>
+                    <span @click="goHome" class="text-5xl font-switzer text-stone-300 font-bold hover:cursor-pointer">thequestboard</span>
                     <div class="relative font-switzer absolute bottom-[27px] right-[1px] inline-block text-xs text-stone-300 font-bold px-2 py-1">
                         <p>beta</p>
                     </div>
@@ -22,15 +22,19 @@
                     <div class="mr-10"></div>
                 </div>
             </div>
-            <div class="my-auto inline-block mr-20 sm:ml-auto flex">
+            <!-- <div class="my-auto inline-block mr-20 sm:ml-auto flex">
                 <span class="font-switzer text-stone-300 text-xl hidden md:flex hover:cursor-pointer border border-stone-600 font-semibold px-6 py-1">Sign In</span>
-            </div>
+            </div> -->
         </div>
     </header>
 </template>
 
 <script setup lang="ts">
 const state = useResults()
+
+function goHome () {
+        window.location.href = 'http://localhost:3000';
+}
 
 const toggleLightMode = () => {
     state.toggleLightMode()
