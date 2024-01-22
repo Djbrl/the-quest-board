@@ -1,8 +1,8 @@
 <template>
-  <div >
-    <button class="buttonP"></button> &emsp;<div>Generic Emails </div>
-    <button class="buttonP"></button> &emsp; <div>Tags Email</div>
-    <button class="buttonP"></button> &emsp; <div>Hot Gigs Emails</div>
+  <div class="prof">
+    <div> <button class="buttonP"></button> &emsp;<span>Generic Emails </span></div>
+    <div><button class="buttonP"></button> &emsp; <span>Tags Email</span></div> 
+    <div> <button class="buttonP"></button> &emsp; <span>Hot Gigs Emails</span></div>
   </div>
 </template>
 
@@ -10,14 +10,18 @@
 </script>
 
 <style>
+  .prof
+  {
+      padding: 10px;
+  }
 
   .buttonP {
-    width: 20px; /* ajustez la largeur selon vos besoins */
-  height: 20px; /* ajustez la hauteur selon vos besoins */
-  border: 1px solid lightgray; /* couleur de la bordure et épaisseur de la bordure */
-  background-color: transparent; /* fond transparent */
-  cursor: pointer; /* curseur au survol du bouton */
-  display: inline-block; /* pour que le bouton ne prenne que l'espace nécessaire */
+    width: 20px;
+  height: 20px; 
+  border: 1px solid lightgray;
+  background-color: transparent;
+  cursor: pointer; 
+  display:inline-flex; 
   }
   
   .buttonP:hover {

@@ -1,63 +1,3 @@
-<!-- <template>
-  <div>
-    <button @click="ouvrirModal">Profile</button>
-    <modal name="profile-modal">
-      <Profile/>
-    </modal>
-  </div>
-</template>
-
-
-
-<script>
-import Vue from 'vue';
-import VModal from 'vue-js-modal';
-
-Vue.use(VModal);
-
-export default {
-  methods: {
-    ouvrirModal() {
-      if (process.browser) {
-        import('vue-js-modal').then((module) => {
-          this.$modal.show('profile-modal');
-        });
-      }
-    },
-  },
-};
-
-</script> -->
-
-
-
-<!-- <script>
-export default {
-  methods: {
-    ouvrirModal() {
-      if (typeof window !== 'undefined') {
-        import('vue-js-modal').then((module) => {
-          this.$modal.show('profile-modal');
-        });
-      }
-    },
-  },
-};
-</script> -->
-
-<!-- <style scoped>
-/* La section style contient les styles CSS du composant, avec l'attribut scoped pour limiter la portée au composant */
-
-button {
-  border: 0.1px rgb(80, 80, 80) solid;
-  color: rgb(153, 153, 153);
-}
-
-button:hover {
-  color: lightgrey;
-}
-</style> -->
-
 <template>
     <!-- Bouton pour ouvrir la modale -->
     <button @click="ouvrirModal">Profile</button>
@@ -103,15 +43,15 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(31, 31, 31, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
+  background: black;
+  padding: 50px;
 }
 
  button {
