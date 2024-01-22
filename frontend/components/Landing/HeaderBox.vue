@@ -8,7 +8,7 @@
                         <p>beta</p>
                     </div>
                 </div>
-    
+
                 <div class="my-auto inline-block mt-2 sm:ml-20 sm:mr-auto flex">
                     <div>
                         <span class="font-switzer text-stone-400 hover:text-stone-300 hover:cursor-pointer hidden md:flex text-sm">Newsletter</span>
@@ -19,12 +19,15 @@
                     <div @click="toggleLightMode()">
                         <span class="font-switzer text-stone-400 hover:text-stone-300 hover:cursor-pointer hidden md:flex text-sm">Light Mode</span>
                     </div>
-                    <div class="mr-10"></div>
                 </div>
             </div>
             <!-- <div class="my-auto inline-block mr-20 sm:ml-auto flex">
                 <span class="font-switzer text-stone-300 text-xl hidden md:flex hover:cursor-pointer border border-stone-600 font-semibold px-6 py-1">Sign In</span>
             </div> -->
+            <div class="flex items-end justify-end ml-auto">
+                <span class="text-4xl font-switzer text-stone-300 font-bold hover:cursor-pointer"><ProfileTab/></span>
+                <div class="mr-10"></div>
+            </div>                 
         </div>
     </header>
 </template>

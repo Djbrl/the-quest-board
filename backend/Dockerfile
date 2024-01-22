@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install gnupg wget -y && \
 WORKDIR /backend
 
 # necessary to avoid unsupported root with --no-sandbox error puppeteer
-RUN adduser --disabled-password --gecos '' server
-RUN chown -R server:server /backend
+RUN adduser --disabled-password --gecos '' postgres
+RUN chown -R postgres:postgres /backend
 
-USER server
+USER postgres
 
 COPY package.json .
 
@@ -27,8 +27,8 @@ RUN npm install
 COPY . .
 
 USER root
-RUN chown -R server:server /backend
-USER server
+RUN chown -R postgres:postgres /backend
+USER postgres
 
 EXPOSE 3000
 

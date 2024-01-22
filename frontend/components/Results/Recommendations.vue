@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { useResults } from '#imports';
+import { useResults } from '~/stores/resultsState';
 const currentSort = ref('all')
 const searchQuery = ref('')
 const showNoResults = ref(false)
