@@ -236,4 +236,17 @@ export class EmailService {
         }
       }
       
+      async checkIfMail(email: string): Promise<boolean> {
+        try {
+            const existingEntry = await this.prisma.mailingList.findUnique({
+                where: { email },
+            });
+
+            return !!existingEntry;
+        } catch (error) {
+            // Gérer les erreurs de base de données si nécessaire
+            console.error('Erreur lors de la vérification de l\'e-mail dans la base de données', error);
+            return false;
+        }
+    } 
 }
