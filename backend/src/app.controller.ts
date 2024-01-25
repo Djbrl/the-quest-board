@@ -27,6 +27,11 @@ export class AppController {
     return await this.emailService.subscribe(email)
   }
 
+  @Get('/checkIfMail')
+  async checkIfMail(@Query('email') email: string) : Promise<any>{
+    return await this.emailService.checkIfMail(email)
+  }
+
   @Get('/unsubscribe')
   async unsubscribe(@Query('email') email: string): Promise<any>{
     return await this.emailService.unsubscribe(email)

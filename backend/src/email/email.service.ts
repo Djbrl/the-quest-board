@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer'
 import { PrismaClient } from '@prisma/client';
+import { AnyNsRecord } from 'dns';
 
 const prisma = new PrismaClient();
 
@@ -236,17 +237,51 @@ export class EmailService {
         }
       }
       
-      async checkIfMail(email: string): Promise<boolean> {
+      async checkIfMail(email: string): Promise<any> {
         try {
-            const existingEntry = await this.prisma.mailingList.findUnique({
-                where: { email },
-            });
+          const existingEntry = await prisma.mailingList.findUnique({
+            where: { email },
+          });
 
-            return !!existingEntry;
-        } catch (error) {
-            // Gérer les erreurs de base de données si nécessaire
-            console.error('Erreur lors de la vérification de l\'e-mail dans la base de données', error);
-            return false;
+          if (!existingEntry) {
+            return {
+              ok: false,
+              errorMessage: 'NotFound',
+            };
+          }
+            return {
+              ok: true,
+              errorMessage: '',
+            };
+          }
+          catch (error) {
+            return {
+              ok: false,
+              errorMessage: 'DbError',
+            };
+          }
         }
-    } 
+
+    //   async checkIfMail(email: string): Promise<boolean> {
+    //     try {
+
+    //     console.log('Checking for email in the database:', email);
+
+    //         const existingEntry = await this.prisma.mailingList.findUnique({
+    //             where: { email },
+    //         });
+    //    if (existingEntry) {
+    //         console.log('Email found in the database:', email);
+    //         return true;
+    //     } else {
+    //         console.log('Email not found in the database:', email);
+    //         return false;
+    //     }
+    //         // return !!existingEntry;
+    //     } catch (error) {
+    //         // Gérer les erreurs de base de données si nécessaire
+    //         console.error('Error when checking for a mail in db/ ', error);
+    //         return false;
+    //     }
+    // }
 }
