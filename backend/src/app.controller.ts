@@ -2,6 +2,7 @@ import { Controller, Get, Query, Req, Scope } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request } from 'express'
 import { EmailService } from './email/email.service';
+import { RedditService } from './reddit/reddit.service';
 
 interface cachedResponse {
   jobs : Array<any>,
@@ -18,8 +19,13 @@ export class AppController {
   private readonly startTime:number;
   private requestHistory = [];
 
-  constructor(private readonly appService: AppService, private readonly emailService: EmailService) {
+  constructor(private readonly appService: AppService, private readonly emailService: EmailService, private readonly redditService: RedditService) {
     this.startTime = Date.now()
+  }
+
+  @Get('/')
+  async hello(@Query('email') email: string): Promise<any>{ 
+    return await this.redditService.getRedditAccessToken()
   }
 
   @Get('/subscribeToMailingList')
