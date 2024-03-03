@@ -12,6 +12,7 @@ export default {
     extend: {
       fontFamily: {
         switzer: ['Switzer', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
         comico: ['Comico', 'sans-serif'],
         zodiak: ['Zodiak', 'sans-serif'],
         khand: ['Khand', 'sans-serif'],

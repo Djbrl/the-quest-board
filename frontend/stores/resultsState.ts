@@ -40,13 +40,14 @@ export const useResults = defineStore('results', () => {
   }
 
   const getToday = () => {
-    sortedResults.value = results.value.filter(result => getHoursPassed(parseInt(result.timestamp)) <= 24)
+    sortedResults.value = results.value.filter(result => getHoursPassed(result.created_utc) <= 24)
+    console.log(sortedResults.value)
     return sortedResults.value
   }
 
   const getLastHour = () => {
     sortedResults.value = results.value.filter(result => {
-      if (getMinutesPassed(parseInt(result.timestamp)) <= 60){
+      if (getMinutesPassed(result.created_utc) <= 90){
         return result
       }
     })
@@ -55,9 +56,9 @@ export const useResults = defineStore('results', () => {
 
   const getTrending = () => {
     sortedResults.value = results.value.filter(result => {
-      if (result.comments >= 15 && getMinutesPassed(parseInt(result.timestamp)) <= 120){
+      if (result.num_comments >= 15 && getMinutesPassed(result.created_utc) <= 120){
         return result
-      } else if (result.comments > 40 && getHoursPassed(parseInt(result.timestamp)) <= 6){
+      } else if (result.num_comments > 40 && getHoursPassed(result.created_utc) <= 6){
         return result
       }
     })

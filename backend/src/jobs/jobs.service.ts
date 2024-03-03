@@ -1,6 +1,8 @@
 import { Injectable, OnModuleInit} from '@nestjs/common';
+import { all } from 'axios';
 import * as puppeteer from 'puppeteer';
 import { EmailService } from 'src/email/email.service';
+import { RedditService } from 'src/reddit/reddit.service';
 
 let hotGigsHistory = []
 let jobsHistory = []
@@ -8,21 +10,35 @@ let jobsHistory = []
 @Injectable()
 export class JobsService implements OnModuleInit {
     private emailService: EmailService;
+    private redditService: RedditService;
     private browser: puppeteer.Browser;
     private pageUrls: Array<string>;
+    private subreddits: Array<string>;
     constructor() {
         this.emailService = new EmailService
+        this.redditService = new RedditService
         this.pageUrls = [
-            "https://www.reddit.com/r/HungryArtists/search?sort=new&restrict_sr=on&q=flair%3AHiring",
-            "https://www.reddit.com/r/artcommissions/search?sort=new&restrict_sr=on&q=flair%3APatron",
-            "https://www.reddit.com/r/hireanartist/search?sort=new",
-            "https://www.reddit.com/r/commissions/search?sort=new",
-            "https://www.reddit.com/r/DesignJobs/new/?f=flair_name%3A%22Hiring%22",
-            "https://www.reddit.com/r/starvingartists/search?sort=new",
-            "https://www.reddit.com/r/fantasyartists/?f=flair_name%3A%22Client%22",
-            "https://www.reddit.com/r/gameDevClassifieds/search?sort=new",
-            "https://www.reddit.com/r/gameDevJobs/search?sort=new",
+            "r/HungryArtists/search?sort=new&restrict_sr=on&q=flair%3AHiring",
+            "r/artcommissions/search?sort=new&restrict_sr=on&q=flair%3APatron",
+            "r/hireanartist/search?sort=new",
+            "r/commissions/search?sort=new",
+            "r/DesignJobs/new/?f=flair_name%3A%22Hiring%22",
+            "r/starvingartists/search?sort=new",
+            "r/fantasyartists/?f=flair_name%3A%22Client%22",
+            "r/gameDevClassifieds/search?sort=new",
+            "r/gameDevJobs/search?sort=new",
         ];
+        this.subreddits = [
+          "HungryArtists",
+          "artcommissions",
+          "hireanartist",
+          "commissions",
+          "DesignJobs",
+          "starvingartists",
+          "fantasyartists",
+          "gameDevClassifieds",
+          "gameDevJobs",
+      ];
     }
 
     async onModuleDestroy(signal?: string) {
@@ -48,12 +64,12 @@ export class JobsService implements OnModuleInit {
     }
       
     private async initializePuppeteer() {
-        console.log("Initializing Puppeteer...");
-        try {
-            this.browser = await puppeteer.launch({args: ['--no-sandbox'], headless: "new" , protocolTimeout: 90000});
-        } catch (error) {
-            console.log("An error occured with Puppeteer : ", error)
-        }
+        // console.log("Initializing Puppeteer...");
+        // try {
+        //     this.browser = await puppeteer.launch({args: ['--no-sandbox'], headless: "new" , protocolTimeout: 90000});
+        // } catch (error) {
+        //     console.log("An error occured with Puppeteer : ", error)
+        // }
     }
 
     private timeAgo(timestamp: string) {
@@ -77,47 +93,58 @@ export class JobsService implements OnModuleInit {
         return { estimate: 'just now', seconds: seconds};
     }
 
-    private async processPost(post: string): Promise<any> {
-        if (post === '') {
-            return null
-        }
-        const fields = post.split("&quot;");
+    private async processPosts(posts: any): Promise<any> {
+        // if (posts === '') {
+        //     return null
+        // }
+        const fields = posts.split("&quot;");
         const forhireRegex = /for_hire|hire_me_|_writer|_ux_|_ui_|_uxui|_uiux|_web|_branding|user_experience|graphic_design|_unity|_ue5|unreal_engine|_programmer/i;
         const hiringRegex= /\/hiring_|\/client_|\/request_|\/patron_|\/paid_|looking_for_an_|l4_artist|lf_artist|who_can|looking_for_[a-zA-Z0-9_]+_artist|looking_for_[a-zA-Z0-9_]+_animator|looking_to_commission|looking_to_hire|looking_to_have|looking_to_get|seeking_[a-zA-Z0-9_]+_artist|seeking_artist|seeking_an_/i;
         const subredditRegex = /\/r\/([^\/]+)/;
-        
-        const job: any = { url:'', title:'', subreddit:'', date:'', timestamp:'', is_nsfw:'', comments:'', upvotes: ''};
-        for (let i = 0; i < fields.length; i++) {
-          if (fields[i] === 'url') {
-            // if (forhireRegex.test(fields[i + 2])) return null ;
-            if (!hiringRegex.test(fields[i + 2]) || forhireRegex.test(fields[i + 2])) return null ;
-            job.url = (fields[i + 2]);
-            job.subreddit = fields[i + 2].match(subredditRegex);
-          }
-          else if (fields[i] === 'title') {
-              job.title = (fields[i + 2]);
-            }
-          else if (fields[i] === 'created_timestamp') {
-            job.date = this.timeAgo(fields[i + 1].substring(1)).estimate;
-            job.timestamp = fields[i + 1].substring(1);
-          }
-          else if (fields[i] === 'nsfw') {
-            job.is_nsfw = (fields[i + 1].substring(1, fields[i + 1].length - 1));
-          }
-          else if (fields[i] === 'number_comments') {
-            job.comments = (fields[i + 1].substring(1, fields[i + 1].length - 1));
-          }
-          else if (fields[i] === 'score') {
-            job.upvotes = (fields[i + 1].substring(1, fields[i + 1].length - 1));
-          }
-        }
 
-        const time = this.timeAgo(job.timestamp)
-        if (job.is_nsfw === "false" && time.estimate !== "Over a week ago" && job.url !== '') {
-          return job;
-        } else {
-          return null;
-        }
+        // return posts.
+        // console.log(post)
+        // const job: any = { url:'', title:'', subreddit:'', timestamp:'', is_nsfw:'', comments:'', upvotes: ''};
+        //   job.url = post.permalink
+        //   job.subreddit = post.subreddit
+        //   job.title = post.title
+        //   job.timestamp = post.created
+        //   job.is_nsfw = post.over_18
+        //   job.comments = post.num_comments
+        //   job.upvotes = post.upvote_ratio
+
+        // for (let i = 0; i < fields.length; i++) {
+        //   if (fields[i] === 'url') {
+        //     // if (forhireRegex.test(fields[i + 2])) return null ;
+        //     if (!hiringRegex.test(fields[i + 2]) || forhireRegex.test(fields[i + 2])) return null ;
+        //     job.url = (fields[i + 2]);
+        //     job.subreddit = fields[i + 2].match(subredditRegex);
+        //   }
+        //   else if (fields[i] === 'title') {
+        //       job.title = (fields[i + 2]);
+        //     }
+        //   else if (fields[i] === 'created_timestamp') {
+        //     job.date = this.timeAgo(fields[i + 1].substring(1)).estimate;
+        //     job.timestamp = fields[i + 1].substring(1);
+        //   }
+        //   else if (fields[i] === 'nsfw') {
+        //     job.is_nsfw = (fields[i + 1].substring(1, fields[i + 1].length - 1));
+        //   }
+        //   else if (fields[i] === 'number_comments') {
+        //     job.comments = (fields[i + 1].substring(1, fields[i + 1].length - 1));
+        //   }
+        //   else if (fields[i] === 'score') {
+        //     job.upvotes = (fields[i + 1].substring(1, fields[i + 1].length - 1));
+        //   }
+        // }
+
+        // console.log("process :", job)
+        // const time = this.timeAgo(job.timestamp)
+        // if (job.is_nsfw === "false" && time.estimate !== "Over a week ago" && job.url !== '') {
+        //   return job;
+        // } else {
+        //   return null;
+        // }
     }
 
     //-----------------------------//
@@ -178,58 +205,76 @@ export class JobsService implements OnModuleInit {
     }
     
     async getJobsFromPages() {
-      let allJobsArray: any[] = [];
-      
-      console.log("fetching your quests")
-      const fetchPromises = this.pageUrls.map(async (url) => await this.fetchPageContent(url));
+      console.log("fetching your quests");
+    
+      // Use Promise.all to fetch posts from all subreddits concurrently
+      const fetchPromises = this.pageUrls.map(async (sub) => {
+        const posts = await this.redditService.getPostsFromSubreddit(sub);
+        return posts;
+      });
+    
       const pages = await Promise.all(fetchPromises);
-      for (const page of pages) {
-        if (page === ''){
-          console.log("Couldn't fetch, skipping this url...")
-          continue ;
+      
+      // Flatten the array of arrays into a single array of posts
+      const allPosts = [].concat(...pages);
+    
+      // Filter posts based on certain conditions
+      const jobsArray = allPosts.filter(job => !job.over_18);
+      console.log("posts fetched : ", allPosts.length)
+      console.log("posts sfw : ", jobsArray.length)
+    
+      const forhireRegex = /for_hire|hire_me_|_writer|_ux_|_ui_|_uxui|_uiux|_web|_branding|user_experience|graphic_design|_unity|_ue5|unreal_engine|_programmer/i;
+      const hiringRegex = /\/hiring_|\/client_|\/request_|\/patron_|\/paid_|looking_for_an_|l4_artist|lf_artist|who_can|looking_for_[a-zA-Z0-9_]+_artist|looking_for_[a-zA-Z0-9_]+_animator|looking_to_commission|looking_to_hire|looking_to_have|looking_to_get|seeking_[a-zA-Z0-9_]+_artist|seeking_artist|seeking_an_/i;
+    
+      // Filter posts based on regex conditions
+      let processedPosts = jobsArray.filter(job => {
+        if (!hiringRegex.test(job.permalink) || forhireRegex.test(job.permalink)) {
+          return false;
         }
-        const pageData = page.split('</head>')[1].split('\n');
-        const hiringPosts = pageData.filter(line => line.includes('<faceplate-tracker source="search" action="view" noun="post"'));
-        const jobPromises = hiringPosts.map(post => this.processPost(post));
-        const jobsArray = (await Promise.all(jobPromises)).filter(job => job !== null);
-        allJobsArray.push(...jobsArray);
-      }
-      allJobsArray = allJobsArray.map(job => {
-        return {
-          ...job,
-          title: job.title.replace(/&amp;/g, "&")
-        };
-      })
-      allJobsArray.sort((jobA, jobB) => {
-        const dateA = parseInt(jobA.timestamp);
-        const dateB = parseInt(jobB.timestamp);
+        return true;
+      });
+    
+      // processedPosts = processedPosts.filter((obj, index, array) => {
+      //   return index === array.findIndex(item => item.id === obj.id);
+      // });
+
+      console.log("relevant psots : ", processedPosts.length);
+    
+      processedPosts.sort((jobA, jobB) => {
+        const dateA = parseInt(jobA.created_utc);
+        const dateB = parseInt(jobB.created_utc);
         return dateB - dateA;
       });
-      
+    
       const nicheRegex = /\b(DnD|D&D|Fantasy|Semi-realistic|Semi-realism|semi realism|concept art|character|homebrew|TTRPG)\b|\$\d{2,3}\$/i;
-      const recentJobs = allJobsArray.filter(job => this.timeAgo(job.timestamp).seconds < 3600)
+      const recentJobs = processedPosts.filter(job => this.timeAgo(job.timestamp).seconds < 3600);
       const nicheGigs = recentJobs.filter(gig => nicheRegex.test(gig.title));
-      const hotGigs = recentJobs.filter(gig => gig.comments >= 15)
-      // if (jobsHistory.length === 0){
-      //   jobsHistory = allJobsArray
-      // }
-      // if (hotGigsHistory.length === 0){
-      //   hotGigsHistory = hotGigs
-      // }
-
-      const newPosts = allJobsArray.length - jobsHistory.length
-      if (newPosts >= 3){
-        await this.emailService.sendEmail('New Quests Are In ! ⚔️', this.emailService.generateCardGrid(allJobsArray.filter(itemB => !jobsHistory.includes(itemB)).slice(0,5)));
-        jobsHistory = allJobsArray
+      const hotGigs = recentJobs.filter(gig => gig.num_comments >= 15);
+    
+      if (jobsHistory.length === 0) {
+        jobsHistory = processedPosts;
       }
-
-      if (hotGigs.length > hotGigsHistory.length){
+    
+      if (hotGigsHistory.length === 0) {
+        hotGigsHistory = hotGigs;
+      }
+    
+      const newPosts = processedPosts.length - jobsHistory.length;
+      
+      if (newPosts >= 3) {
+        await this.emailService.sendEmail('New Quests Are In ! ⚔️', this.emailService.generateCardGrid(processedPosts.filter(itemB => !jobsHistory.includes(itemB)).slice(0, 5)));
+        jobsHistory = processedPosts;
+      }
+    
+      if (hotGigs.length > hotGigsHistory.length) {
         await this.emailService.sendEmail('Hot Gig Alert ! ⚔️', this.emailService.generateCardGrid(hotGigs.filter(itemB => !hotGigsHistory.includes(itemB))));
-        hotGigsHistory = hotGigs
+        hotGigsHistory = hotGigs;
       }
-      // if (nicheGigs.length > 0){
-      //     await this.emailService.sendEmail('New Quests Available ! ⚔️', this.emailService.generateCardGrid(nicheGigs));
-      // }
-      return allJobsArray
+    
+      if (nicheGigs.length > 0) {
+        await this.emailService.sendEmail('New Quests Available ! ⚔️', this.emailService.generateCardGrid(nicheGigs));
+      }
+    
+      return processedPosts;
     }
-}
+    }

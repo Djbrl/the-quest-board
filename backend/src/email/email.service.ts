@@ -48,8 +48,8 @@ export class EmailService {
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: process.env.APP_EMAIL || 'artquestboard@gmail.com',
-            pass: process.env.APP_PASS || 'rlczokbflkgjqxmj'
+            user: process.env.APP_EMAIL,
+            pass: process.env.APP_PASS
           }
         });
       

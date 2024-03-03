@@ -23,11 +23,6 @@ export class AppController {
     this.startTime = Date.now()
   }
 
-  @Get('/')
-  async hello(@Query('email') email: string): Promise<any>{ 
-    return await this.redditService.getRedditAccessToken()
-  }
-
   @Get('/subscribeToMailingList')
   async subToMailingList(@Query('email') email: string): Promise<any>{
     return await this.emailService.subscribe(email)

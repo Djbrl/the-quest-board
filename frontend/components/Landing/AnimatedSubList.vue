@@ -2,7 +2,7 @@
     <div class="animation-container">
         <div class="animation-content">
             <!-- Duplicate the content for infinite effect -->
-            <div class="text-4xl font-switzer text-violet-400/40 font-semibold">
+            <div class="text-xl font-switzer text-violet-400/40 font-semibold">
                 <p class="hover:text-violet-400">r/HungryArtists</p>
                 <p class="hover:text-violet-400">r/commissions</p>
                 <p class="hover:text-violet-400">r/artcommissions</p>
@@ -14,7 +14,7 @@
                 <p class="hover:text-violet-400">r/gameDevClassified</p>
             </div>
             <!-- Original content -->
-            <div class="text-4xl font-switzer text-violet-400/40 font-semibold">
+            <div class="text-xl font-switzer text-violet-400/40 font-semibold">
                 <p class="hover:text-violet-400">r/HungryArtists</p>
                 <p class="hover:text-violet-400">r/commissions</p>
                 <p class="hover:text-violet-400">r/artcommissions</p>

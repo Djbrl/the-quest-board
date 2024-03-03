@@ -3,58 +3,66 @@ import axios from 'axios';
 
 @Injectable()
 export class RedditService {
-  private readonly clientId = 'XrIoJwoP0RYhkjdFJ_XJuQ';
-  private readonly clientSecret = 'qCqvhYcW2utY-k9efV9ywYI0ATesOw';
-  private readonly username = 'DistinguishableLotus';
-  private readonly password = 'R0lalala';
-  private readonly userAgent = 'tqb_v2 (by /u/DistinguishableLotus)';
   private accessToken: string | null = null;
+  private expiresAt: number | null = null;
 
-
-  async getRedditAccessToken() {
+  async getPostsFromSubreddit(url) {
     try {
-      // Check if access token is already available
-      if (!this.accessToken) {
-        // Step 1: Get Access Token
-        const tokenResponse = await axios.post('https://www.reddit.com/api/v1/access_token', null, {
-          auth: {
-            username: this.clientId,
-            password: this.clientSecret,
-          },
-          params: {
-            grant_type: 'password',
-            username: this.username,
-            password: this.password,
-          },
-          headers: {
-            'User-Agent': this.userAgent,
-          },
-        });
-
-        this.accessToken = tokenResponse.data.access_token;
+      // Extract subreddit name and parameters from the URL
+      // const urlParts = new URL(url);
+      // const subreddit = urlParts.pathname.split('/')[2]; // Extracts subreddit name
+      // const params = new URLSearchParams(urlParts.search); // Extracts query parameters
+  
+      // Check if the token is not set or has expired
+      if (!this.accessToken || (this.expiresAt && Date.now() > this.expiresAt)) {
+        const tokenResponse = await this.requestAccessToken();
+        this.accessToken = tokenResponse.access_token;
+        this.expiresAt = Date.now() + tokenResponse.expires_in * 1000;
       }
-
-      // You can add logic to refresh the access token when it expires
-
-      // Step 2: Fetch posts from HungryArtists subreddit
-      const subreddit = 'HungryArtists';
-      const postsResponse = await axios.get(`https://oauth.reddit.com/r/${subreddit}/new`, {
+  
+      const postsResponse = await axios.get(`https://oauth.reddit.com/${url}`, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
-          'User-Agent': this.userAgent,
+          'User-Agent': process.env.REDDIT_USERAGENT,
         },
+        // params: {
+        //   ...Object.fromEntries(params.entries()), // Add other query parameters from the URL
+        //   limit:50
+        // },
       });
-
-      const posts = postsResponse.data.data.children;
-
-      // Process the posts as needed
-      console.log('Posts from HungryArtists:', posts);
-
-      // You can return any necessary data or perform additional operations here
-      return 'Posts fetched successfully';
+      
+      let posts = []
+      for (const post of postsResponse.data.data.children){
+        posts.push(post.data);
+        // console.log(subreddit, ' : ', post.data.length)
+      }
+      // if (subreddit === "HungryArtists"){
+      //   console.log("HA : ", posts)
+      // }
+      // console.log(Object.fromEntries(params.entries()))
+      return posts;
     } catch (error) {
       console.error('Error fetching posts from Reddit:', error.response?.data || error.message);
-      throw error;
+      return null;
     }
+  }  
+
+  private async requestAccessToken() {
+    const tokenResponse = await axios.post('https://www.reddit.com/api/v1/access_token', null, {
+      auth: {
+        username: process.env.REDDIT_CLIENT_ID,
+        password: process.env.REDDIT_CLIENT_SECRET,
+      },
+      params: {
+        grant_type: 'password',
+        username: process.env.REDDIT_USERNAME,
+        password: process.env.REDDIT_PASSWORD,
+      },
+      headers: {
+        'User-Agent': process.env.REDDIT_USERAGENT,
+      },
+    });
+
+    return tokenResponse.data;
   }
 }

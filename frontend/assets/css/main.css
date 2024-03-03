@@ -29,6 +29,32 @@
   font-style: normal;
 }
 
+/* Inter */
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/inter/InterDisplay-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/inter/InterDisplay-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/inter/InterDisplay-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/inter/InterDisplay-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
 /* Pixel */
 @font-face {
   font-family: 'Pixel';

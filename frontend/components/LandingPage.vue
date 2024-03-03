@@ -3,13 +3,13 @@
     <LandingHeaderBox/>
     <div class="min-h-[90vh] justify-center mb-40 items-center">
         <!-- main landing container -->
-        <div class="w-[90vw] mx-auto sm:border-x sm:border-b border-stone-700 p-4">
+        <div class="w-[90vw] mx-auto flex p-4">
             <!-- hero -->
-            <div class="w-full h-2/3">
-                <LandingHeroBlock class="flex justify-center"/>
+            <div class=" h-1/3">
+                <LandingHeroBlock/>
             </div>
             <!-- results -->
-            <div class="h-1/3 w-10/12 mx-auto">
+            <div class="h-1/3 w-9/12 mx-auto">
                 <ResultsResultLoader v-show="showLoader"/>
                 <div v-if="showNoResults" class="inline-block flex flex-col justify-center">
                     <p class="mt-4 text-center px-2 py-1 text-stone-300 font-pixel text-3xl">No results.</p>
