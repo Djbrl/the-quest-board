@@ -18,7 +18,7 @@ export class AppService implements OnApplicationShutdown, OnModuleInit, OnModule
     this.emailService = new EmailService
   }
   async onModuleInit() {
-    await this.jobsService.onModuleInit()
+    // await this.jobsService.onModuleInit()
     await this.startPeriodicFetching()
   }
 
