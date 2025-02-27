@@ -12,7 +12,7 @@ export class AppService implements OnApplicationShutdown, OnModuleInit, OnModule
   private refreshTimer: number;
 
   constructor() {
-    this.refreshTimer = 1000 * 60 * 5;
+    this.refreshTimer = 1000 * 60 * 3;
     this.preparedResponse = [];
     this.jobsService = new JobsService
     this.emailService = new EmailService

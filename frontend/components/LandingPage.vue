@@ -43,7 +43,6 @@ const fetchQuests = async () => {
         const res:any = await fetch("http://localhost:3001/getQuests")
         showLoader.value = false;
         const data = await res.json()
-        console.log(data)
         if (data.length > 0){
             sortEngine.setResults(data)
         } else {

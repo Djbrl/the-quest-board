@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { exec } from 'child_process'; // Import exec directly from 'child_process'
 
 @Injectable()
 export class RedditService {
@@ -15,17 +16,14 @@ export class RedditService {
         this.expiresAt = Date.now() + tokenResponse.expires_in * 1000;
       }
   
+      
       const postsResponse = await axios.get(`https://oauth.reddit.com/${url}`, {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
           'User-Agent': process.env.REDDIT_USERAGENT,
         },
-        // params: {
-        //   ...Object.fromEntries(params.entries()), // Add other query parameters from the URL
-        //   limit:50
-        // },
       });
-      
+
       let posts = []
       for (const post of postsResponse.data.data.children){
         posts.push(post.data);
@@ -55,4 +53,27 @@ export class RedditService {
 
     return tokenResponse.data;
   }
+
+  async fetchPostsFromReddit(): Promise<string[]> {
+    try {
+      const result = await new Promise<string>((resolve, reject) => {
+        exec('python3.10 ./reddit_client.py', (error, stdout, stderr) => {
+          if (error) {
+            console.error('Error occurred while fetching posts from Reddit:', error);
+            reject(error);
+          } else if (stderr) {
+            console.error('Error occurred while fetching posts from Reddit:', stderr);
+            reject(new Error(stderr));
+          } else {
+            resolve(stdout);
+          }
+        });
+      });
+      return result.trim().split('\n');
+    } catch (error) {
+      console.error('Failed to fetch posts from Reddit:', error);
+      return [];
+    }
+  }
 }
+

@@ -14,47 +14,57 @@ export class EmailService {
 
     generateCardGrid(allJobsArray: any[]): string {
     
+        console.log("card grid building : ", allJobsArray.length)
         const cardsHTML = allJobsArray
         .filter((job) => {
           const now = Date.now();
-          const seconds = Math.floor((now - parseInt(job.timestamp)) / 1000);
-          return seconds < 84600;
-        })
+          let jobTimestamp = parseInt(job.created_utc);
+
+          const seconds = Math.floor((now / 1000) - jobTimestamp);
+
+          console.log("created itc : ", job.created_utc, "seconds since created: ", seconds);
+          return seconds < 84600; // Only include jobs from the last 23.5 hours
+      })
         .map(job => {
+          console.log("job to mail", job.length)
           return `
             <div class="card">
             <a href=${'https://reddit.com' + job.url} class="card-title" style="color: #dbdbdb;">${job.title}</a>
             <div class="card-content">
-                <div style="color: #dbdbdb;"><strong>Subreddit</strong> ${job.url.split('/')[2]}</div>
-                <div style="color: #dbdbdb;"><strong>Date:</strong> ${job.date}</div>
-                <div style="color: #dbdbdb;"><strong>Comments:</strong> ${job.comments}</div>
+                <div style="color: #dbdbdb;"><strong>Subreddit</strong> ${job.permalink.split('/')[2]}</div>
+                <div style="color: #dbdbdb;"><strong>Upvotes:</strong> ${job.score}</div>
+                <div style="color: #dbdbdb;"><strong>Comments:</strong> ${job.num_comments}</div>
                 <!-- Add more details as needed -->
               </div>
             </div>
           `;
         });
         
+        console.log("jobs html : ", cardsHTML.length)
         // Wrap the cards in a container
         const gridHTML = `
           <div class="grid-container">
             ${cardsHTML.join('')}
           </div>
         `;
-      
+        if (cardsHTML.length === 0) return '';
         return gridHTML;
       }
       
       async sendEmail(subject: string, html: string) {
+        if (html.length === 0) {
+          return ;
+        }
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: process.env.APP_EMAIL,
-            pass: process.env.APP_PASS
+            user: process.env.APP_EMAIL || "artquestboard@gmail.com",
+            pass: process.env.APP_PASS || "rlczokbflkgjqxmj"
           }
         });
       
         const mailOptions = {
-          from: process.env.APP_EMAIL,
+          from: process.env.APP_EMAIL || "artquestboard@gmail.com",
           to: 'sydismyname123@gmail.com',
           subject,
           html: `
@@ -183,6 +193,7 @@ export class EmailService {
         };
       
         await transporter.sendMail(mailOptions);
+        console.log("email sent")
       }
 
       async subscribe(email: string): Promise<any> {

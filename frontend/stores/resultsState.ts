@@ -41,7 +41,7 @@ export const useResults = defineStore('results', () => {
 
   const getToday = () => {
     sortedResults.value = results.value.filter(result => getHoursPassed(result.created_utc) <= 24)
-    console.log(sortedResults.value)
+    // console.log(sortedResults.value)
     return sortedResults.value
   }
 

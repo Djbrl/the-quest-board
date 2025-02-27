@@ -25,7 +25,7 @@ export function timestampConverter() {
 }
 
 export function goToPost (url: string) {
-    window.open(`https://reddit.com${url}`, '_blank');
+    window.open(url, '_blank');
 }
 
 export function isHotGig(timestamp:number, comments:number) {

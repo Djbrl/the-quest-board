@@ -1,14 +1,13 @@
 FROM node:slim
 
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip
 
-# https://dev.to/cloudx/how-to-use-puppeteer-inside-a-docker-container-568c
-RUN apt-get update && apt-get install openssl -y
+RUN mkdir backend
 
-WORKDIR /backend
+WORKDIR backend
 
 COPY package.json .
-
-COPY prisma/ .
 
 RUN npm install
 
